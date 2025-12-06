@@ -1,0 +1,36 @@
+apiVersion: 1
+
+datasources:
+- name: grafana-postgresql-datasource
+  type: grafana-postgresql-datasource
+  typeName: PostgreSQL
+  typeLogoUrl: public/plugins/grafana-postgresql-datasource/img/postgresql_logo.svg
+  access: proxy
+  url: postgres:5432
+  user: myuser
+  secureJsonData:
+      password: 'mypassword'
+  database: ""
+  basicAuth: false
+  isDefault: false
+  jsonData:
+    connMaxLifetime: 14400
+    database: mydb
+    maxIdleConns: 100
+    maxIdleConnsAuto: true
+    maxOpenConns: 100
+    pdcInjected: false
+    postgresVersion: 1600
+    sslmode: disable
+- name: Prometheus
+  type: prometheus
+  typeName: Prometheus
+  typeLogoUrl: public/plugins/prometheus/img/prometheus_logo.svg
+  access: proxy
+  url: http://prometheus:9090
+  user: ""
+  database: ""
+  basicAuth: false
+  isDefault: false
+  jsonData:
+    timeInterval: 5s

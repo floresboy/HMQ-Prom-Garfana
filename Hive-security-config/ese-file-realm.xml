@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ese-file-realm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="ese-file-realm.xsd">
+    <mqtt>
+        <!-- users are fetched via AUTHENTICATION_KEY-->
+        <users>
+            <user>
+                <name>mqtt-user-1</name>
+                <password>mqtt-password-1</password>
+                <permissions>
+                    <permission>
+                        <topic>#</topic>
+                        <qos>ALL</qos>
+                        <activity>ALL</activity>
+                        <retain>ALL</retain>
+                        <shared-subscription>ALL</shared-subscription>
+                        <shared-group>group-1</shared-group>
+                    </permission>
+                </permissions>
+            </user>
+
+             <user>
+                <name>sensor</name>
+                <password>password</password>
+                <permissions>
+                    <permission>
+                        <topic>sensors/#</topic>
+                        <qos>ALL</qos>
+                        <activity>PUBLISH</activity>
+                    </permission>
+                </permissions>
+            </user>
+
+            <user>
+                <name>mqtt-user-2</name>
+                <!-- <password>mqtt-password-2</password> -->
+                <!-- https://docs.hivemq.com/ese/latest/enterprise-security-extension/ese-helper.html#hash -->
+                <password encoding="Base64">aDGGvi/kW+ba1ZlQxObGZT7kNK7Vg4qkFR7HvHapCGk=</password>
+                <iterations>10</iterations>
+                <salt>mqtt-password-2-salt</salt>
+                <algorithm>PKCS5S2</algorithm>
+                <roles>
+                    <role>publisher</role>
+                    <role>subscriber</role>
+                </roles>
+            </user>
+        </users>
+
+        <!-- roles are fetched via AUTHENTICATION_ROLE_KEY-->
+        <roles>
+            <role>
+                <id>publisher</id>
+                <permissions>
+                    <permission>
+                        <topic>topic-1</topic>
+                        <qos>ALL</qos>
+                        <activity>PUBLISH</activity>
+                    </permission>
+                    <permission>
+                        <topic>topic-2</topic>
+                        <qos>ALL</qos>
+                        <activity>PUBLISH</activity>
+                    </permission>
+                </permissions>
+            </role>
+
+            <role>
+                <id>subscriber</id>
+                <permissions>
+                    <permission>
+                        <topic>topic-3</topic>
+                        <qos>ALL</qos>
+                        <activity>SUBSCRIBE</activity>
+                    </permission>
+                </permissions>
+            </role>
+        </roles>
+    </mqtt>
+
+    <control-center>
+        <!-- list of available permissions:
+               https://www.hivemq.com/docs/ese/latest/enterprise-security-extension/ese.html#control-center-access-control-permissions -->
+        <users>
+            <user>
+                <name>cc-user-1</name>
+                <password>cc-password-1</password>
+                <permissions>
+                    <permission>HIVEMQ_SUPER_ADMIN</permission>
+                </permissions>
+            </user>
+
+            <user>
+                <name>cc-user-2</name>
+                <!-- <password>cc-password-2</password> -->
+                <!-- https://docs.hivemq.com/ese/latest/enterprise-security-extension/ese-helper.html#hash -->
+                <password encoding="Base64">XW5ESC/iKdtYWIDpcgeFOIXhjA9reoCBzNcFm/SQhWk=</password>
+                <iterations>10</iterations>
+                <salt>cc-password-2-salt</salt>
+                <algorithm>PKCS5S2</algorithm>
+                <roles>
+                    <role>topics</role>
+                    <role>shared-subscriptions</role>
+                </roles>
+            </user>
+        </users>
+
+        <roles>
+            <role>
+                <id>topics</id>
+                <permissions>
+                    <permission>HIVEMQ_VIEW_DATA_TOPIC</permission>
+                </permissions>
+            </role>
+            <role>
+                <id>shared-subscriptions</id>
+                <permissions>
+                    <permission>HIVEMQ_VIEW_DATA_TOPIC</permission>
+                    <permission>HIVEMQ_VIEW_DATA_SUBSCRIPTION</permission>
+                    <permission>HIVEMQ_EDIT_DATA_SUBSCRIPTION</permission>
+                    <permission>HIVEMQ_VIEW_PAGE_SHARED_SUBSCRIPTION_DETAIL</permission>
+                    <permission>HIVEMQ_VIEW_PAGE_SHARED_SUBSCRIPTION_LIST</permission>
+                </permissions>
+            </role>
+        </roles>
+    </control-center>
+
+    <rest-api>
+        <!-- list of available permissions:
+                https://docs.hivemq.com/ese/latest/enterprise-security-extension/ese.html#rest-api-access-permissions -->
+        <users>
+            <user>
+                <name>rest-api-user-1</name>
+                <password>rest-api-password-1</password>
+                <permissions>
+                    <permission>HIVEMQ_SUPER_ADMIN</permission>
+                </permissions>
+            </user>
+
+            <user>
+                <name>rest-api-user-2</name>
+                <!-- <password>rest-api-password-2</password> -->
+                <!-- https://docs.hivemq.com/ese/latest/enterprise-security-extension/ese-helper.html#hash -->
+                <password encoding="Base64">apukEACJ+UeyE+onxnseWRZi/QgWOeSTtFwxHJTswxc=</password>
+                <iterations>10</iterations>
+                <salt>rest-api-password-2-salt</salt>
+                <algorithm>PKCS5S2</algorithm>
+                <roles>
+                    <role>backups</role>
+                    <role>subscriptions</role>
+                </roles>
+            </user>
+        </users>
+
+        <roles>
+            <role>
+                <id>backups</id>
+                <permissions>
+                    <permission>HIVEMQ_MANAGEMENT_BACKUPS_GET</permission>
+                    <permission>HIVEMQ_MANAGEMENT_BACKUPS_POST</permission>
+                    <permission>HIVEMQ_MANAGEMENT_BACKUPS_BACKUPID_GET</permission>
+                    <permission>HIVEMQ_MANAGEMENT_BACKUPS_BACKUPID_POST</permission>
+                    <permission>HIVEMQ_MANAGEMENT_FILES_BACKUPS_BACKUPID_GET</permission>
+                </permissions>
+            </role>
+            <role>
+                <id>subscriptions</id>
+                <permissions>
+                    <permission>HIVEMQ_MQTT_CLIENTS_CLIENTID_SUBSCRIPTIONS_GET</permission>
+                </permissions>
+            </role>
+        </roles>
+    </rest-api>
+</ese-file-realm>

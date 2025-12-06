@@ -1,0 +1,115 @@
+version: "3.8"
+
+services:
+
+  db:
+    image: postgres:16
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+
+  hive-init:
+    image: postgres:16
+    depends_on:
+      - db
+    environment:
+      PGPASSWORD: mypassword
+    volumes:
+      - ./hive-init-sql:/sql
+    command: >
+      sh -c "
+        until pg_isready -h db -p 5432 -U myuser; do sleep 1; done;
+        psql -h db -U myuser -d mydb -f /sql/create_tables.sql
+      "
+
+  hivemq:
+    image: hivemq/hivemq4
+    container_name: hivemq
+    ports:
+      - "1883:1883"    # MQTT
+      - "8080:8080"    # HiveMQ Control Center
+      - "9399:9399"    # Prometheus metrics (extension)
+    volumes:
+      - ./hivemq-data:/opt/hivemq/data
+      - ./Hive-config:/opt/hivemq/conf
+      - ./hivemq-prometheus-extension:/opt/hivemq/extensions/hivemq-prometheus-extension
+      - ./postgres-conf:/opt/hivemq/extensions/hivemq-postgresql-extension/conf
+      - ./Hive-security-config:/opt/hivemq/extensions/hivemq-enterprise-security-extension/conf
+      - ./hivemq-entrypoint.sh:/entrypoint.sh
+    environment:
+      HIVEMQ_LICENSE: ""
+      POSTGRES_HOST: db
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+    depends_on:
+      - db
+      - hive-init
+    restart: unless-stopped
+    entrypoint: ["/entrypoint.sh"]
+
+
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./hivemq-grafana-dashboard-prometheus-4.json:/var/lib/grafana/dashboards/hivemq.json
+      - ./sensor-grafana-dashboard-postgres.json:/var/lib/grafana/dashboards/sensor.json
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/hivemq.json
+      - GF_SECURITY_ADMIN_USER=admin       # default username
+      - GF_SECURITY_ADMIN_PASSWORD=admin   # default password
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SECURITY_DISABLE_INITIAL_ADMIN_CHANGE=true
+    depends_on:
+      - db
+      - hive-init
+    restart: unless-stopped
+  
+  temp-simulator:
+    image: python:3.12-slim
+    container_name: temp-simulator
+    depends_on:
+      - hivemq
+    environment:
+      MQTT_HOST: hivemq
+      MQTT_PORT: 1883
+      MQTT_TOPIC: sensors/temperature
+      INTERVAL: 5
+    command: >
+      sh -c "pip install paho-mqtt  --root-user-action=ignore &&
+             python3 /app/publisher.py"
+    volumes:
+      - ./temp-simulator:/app
+    restart: unless-stopped
+
+
+
+volumes:
+  postgres_data:
+  grafana-storage:

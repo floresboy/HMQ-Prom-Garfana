@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<enterprise-security-extension
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="config.xsd"
+        version="1">
+    <realms>
+        <file-realm>
+            <name>file-realm</name>
+            <enabled>true</enabled>
+            <configuration>
+                <file-path>conf/ese-file-realm.xml</file-path>
+            </configuration>
+        </file-realm>
+    </realms>
+    <pipelines>
+        <!-- secure access to the mqtt broker -->
+        <listener-pipeline listener="ALL">
+            <!-- authenticate over a file -->
+            <file-authentication-manager>
+                <realm>file-realm</realm>
+            </file-authentication-manager>
+            <!-- authorize over a file -->
+            <file-authorization-manager>
+                <realm>file-realm</realm>
+            </file-authorization-manager>
+        </listener-pipeline>
+        <!-- secure access to the control center -->
+        <control-center-pipeline>
+            <!-- authenticate over a file -->
+            <file-authentication-manager>
+                <realm>file-realm</realm>
+            </file-authentication-manager>
+            <!-- authorize over a file -->
+            <file-authorization-manager>
+                <realm>file-realm</realm>
+            </file-authorization-manager>
+        </control-center-pipeline>
+        <!-- secure access to the REST API -->
+        <rest-api-pipeline listener="ALL">
+            <authentication-preprocessors>
+                <http-headers-preprocessor>
+                    <basic-auth-extraction/>
+                </http-headers-preprocessor>
+            </authentication-preprocessors>
+            <!-- authenticate over a file -->
+            <file-authentication-manager>
+                <realm>file-realm</realm>
+            </file-authentication-manager>
+            <!-- authorize over a file -->
+            <file-authorization-manager>
+                <realm>file-realm</realm>
+            </file-authorization-manager>
+        </rest-api-pipeline>
+    </pipelines>
+</enterprise-security-extension>
