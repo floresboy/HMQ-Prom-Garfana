@@ -41,14 +41,5 @@ mqtt sub -t "#" -u mqtt-user-1 -pw mqtt-password-1
 
 
 
-curl -s -H "Authorization: Bearer glsa_9Gd60WGPfwNFYZZDaWuKgEKqUJzlXlzK_dbbae061" \
-     http://0.0.0.0:3000/api/datasources
-
-
-curl -s -H "Authorization: Bearer glsa_9Gd60WGPfwNFYZZDaWuKgEKqUJzlXlzK_dbbae061" \
-     http://localhost:3000/api/datasources \
-  | jq 'map(del(.id,.uid,.orgId,.version,.created,.updated,.readOnly))' \
-  | yq -P 
-
 
 pip install paho-mqtt  --root-user-action=ignore
