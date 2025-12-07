@@ -6,7 +6,7 @@ ALIAS="hivemq"
 KEYSTORE_PASSWORD="changeit"   # <-- update if needed
 KEY_PASSWORD="changeit"         # usually same as keystore password
 DAYS=365
-DN="CN=localhost, OU=IT, O=MyOrg, L=City, S=State, C=US"
+DN="CN=localhost, OU=SE, O=HiveMQ, L=Enschede, S=OV, C=NL"
 
 # === RUN ===
 
