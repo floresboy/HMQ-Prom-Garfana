@@ -34,7 +34,8 @@ tempdata
 ORDER BY
 isotime ASC;
 
-mqtt sub -t "#" -u mqtt-user-1 -pw mqtt-password-1
+
+mqtt sub -t "#" -u superuser -pw admin -p 1883 -J | jq
 
 pip install paho-mqtt  --root-user-action=ignore
 
@@ -53,3 +54,5 @@ mqtt test \
 
 
 openssl x509 -in hivemq.crt -text -noout
+
+zip -r ../AddContextToSensors-1.0.0.module . 

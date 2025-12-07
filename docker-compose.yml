@@ -43,7 +43,7 @@ services:
       - "9399:9399"    # Prometheus metrics (extension)
       - "8888:8888"    # HiveMQ API
     volumes:
-      - ./hivemq-data:/opt/hivemq/data
+      # - ./hivemq-data:/opt/hivemq/data
       - ./Hive-config:/opt/hivemq/conf
       - ./hivemq-prometheus-extension:/opt/hivemq/extensions/hivemq-prometheus-extension
       - ./postgres-conf:/opt/hivemq/extensions/hivemq-postgresql-extension/conf
