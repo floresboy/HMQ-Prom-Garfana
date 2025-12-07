@@ -42,6 +42,18 @@
                 <realm>file-realm</realm>
             </file-authorization-manager>
         </listener-pipeline>
+
+         <!-- secure access to the mqtt broker -->
+        <listener-pipeline listener="TLS-listener">
+            <!-- authenticate over a file -->
+            <file-authentication-manager>
+                <realm>file-realm</realm>
+            </file-authentication-manager>
+            <!-- authorize over a file -->
+            <file-authorization-manager>
+                <realm>file-realm</realm>
+            </file-authorization-manager>
+        </listener-pipeline>
        
         <!-- secure access to the mqtt broker -->
         <listener-pipeline listener="dbsecure-listener">

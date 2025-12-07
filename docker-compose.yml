@@ -37,6 +37,7 @@ services:
     container_name: hivemq
     ports:
       - "1883:1883"    # MQTT
+      - "8883:8883"    # mTLS MQTT
       - "1884:1884"    # MQTT with DB security 
       - "8080:8080"    # HiveMQ Control Center
       - "9399:9399"    # Prometheus metrics (extension)

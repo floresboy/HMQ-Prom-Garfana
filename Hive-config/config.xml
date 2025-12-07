@@ -11,7 +11,7 @@
             <bind-address>0.0.0.0</bind-address>
             <name>open-world-listener</name>
         </tcp-listener>
-   
+
         <tcp-listener>
             <port>1884</port>
             <bind-address>0.0.0.0</bind-address>
@@ -23,7 +23,29 @@
             <bind-address>127.0.0.1</bind-address>
             <name>same-machine-listener</name>
         </tcp-listener>
+   
+        <!-- TLS MQTT -->
+        <tls-tcp-listener>     
+                <port>8883</port>
+                <bind-address>0.0.0.0</bind-address>
+                <name>TLS-listener</name>
+                <tls>
+               
+                    <keystore>
+                        <path>./conf/hivemq.jks</path>
+                        <password>changeit</password>
+                        <private-key-password>changeit</private-key-password>
+                    </keystore>
+                    <protocols>
+                        <protocol>TLSv1.2</protocol>
+                        <protocol>TLSv1.3</protocol>
+                    </protocols>
+                </tls>
+        </tls-tcp-listener>
     </listeners>
+
+
+
 
    <control-center>
         <enabled>true</enabled>

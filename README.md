@@ -43,3 +43,13 @@ mqtt test -u superuser -pw admin -p 1883                    # file realm superus
 mqtt test -u "superuser" -pw supersecurepassword -p 1884    # DB realm /   superuser / supersecurepassword
 mqtt pub -u sensor -pw password -t sensors/testsensor -m 123
 
+# TLS test
+mqtt test \
+ -u superuser -pw admin \
+  -h localhost \
+  -p 8883 \
+  --secure \
+  --cafile hivemq.crt 
+
+
+openssl x509 -in hivemq.crt -text -noout
