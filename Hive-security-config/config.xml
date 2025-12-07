@@ -3,7 +3,8 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="config.xsd"
         version="1">
-    <realms>
+  
+        <realms>
         <file-realm>
             <name>file-realm</name>
             <enabled>true</enabled>
@@ -11,10 +12,27 @@
                 <file-path>conf/ese-file-realm.xml</file-path>
             </configuration>
         </file-realm>
+
+        <sql-realm>
+            <name>postgres-realm</name> 
+            <enabled>true</enabled>
+            <configuration>
+                <db-type>POSTGRES</db-type>
+                <db-name>mydb</db-name> 
+                <db-host>postgres</db-host> 
+                <db-port>5432</db-port>
+                <db-username>myuser</db-username> 
+                <db-password>mypassword</db-password> 
+            </configuration>
+        </sql-realm>
+
+
     </realms>
+
     <pipelines>
+       
         <!-- secure access to the mqtt broker -->
-        <listener-pipeline listener="ALL">
+        <listener-pipeline listener="open-world-listener">
             <!-- authenticate over a file -->
             <file-authentication-manager>
                 <realm>file-realm</realm>
@@ -24,6 +42,22 @@
                 <realm>file-realm</realm>
             </file-authorization-manager>
         </listener-pipeline>
+       
+        <!-- secure access to the mqtt broker -->
+        <listener-pipeline listener="dbsecure-listener">
+            <!-- authenticate over a sql db -->
+            <sql-authentication-manager>
+                <realm>postgres-realm</realm> 
+            </sql-authentication-manager>       
+            <!-- authorize over a sql db -->
+            <sql-authorization-manager>
+                <realm>postgres-realm</realm>
+                <use-authorization-key>false</use-authorization-key>
+                <use-authorization-role-key>true</use-authorization-role-key>
+            </sql-authorization-manager>
+        </listener-pipeline>
+
+
         <!-- secure access to the control center -->
         <control-center-pipeline>
             <!-- authenticate over a file -->
@@ -35,6 +69,7 @@
                 <realm>file-realm</realm>
             </file-authorization-manager>
         </control-center-pipeline>
+    
         <!-- secure access to the REST API -->
         <rest-api-pipeline listener="ALL">
             <authentication-preprocessors>
@@ -51,5 +86,6 @@
                 <realm>file-realm</realm>
             </file-authorization-manager>
         </rest-api-pipeline>
+    
     </pipelines>
 </enterprise-security-extension>

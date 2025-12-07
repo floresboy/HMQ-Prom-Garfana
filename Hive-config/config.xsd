@@ -1,0 +1,1296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <!--- root -->
+    <xs:element name="hivemq" type="hiveMQConfigEntity"/>
+
+    <xs:complexType name="hiveMQConfigEntity">
+        <xs:all>
+            <xs:element name="listeners" type="listenersEntity" minOccurs="0"/>
+            <xs:element name="mqtt" type="mqttConfigEntity" minOccurs="0"/>
+            <xs:element name="restrictions" type="restrictionsEntity" minOccurs="0"/>
+            <xs:element name="security" type="securityConfigEntity" minOccurs="0"/>
+            <xs:element name="internal" type="internalConfigEntity" minOccurs="0"/>
+            <xs:element name="cluster" type="clusterConfigEntity" minOccurs="0"/>
+            <xs:element name="control-center" type="controlCenterEntity" minOccurs="0"/>
+            <xs:element name="overload-protection" type="overloadProtectionEntity" minOccurs="0"/>
+            <xs:element name="anonymous-usage-statistics" type="usageStatisticsEntity" minOccurs="0"/>
+            <xs:element name="rest-api" type="restApiEntity" minOccurs="0"/>
+            <xs:element name="health-api" type="healthApiEntity" minOccurs="0"/>
+            <xs:element name="mqtt-addons" type="mqttAddonsEntity" minOccurs="0"/>
+            <xs:element name="client-event-history" type="clientEventHistoryEntity" minOccurs="0"/>
+            <xs:element name="data-hub" type="dataHubEntity" minOccurs="0"/>
+            <xs:element name="control-plane" type="controlPlaneEntity" minOccurs="0"/>
+        </xs:all>
+    </xs:complexType>
+
+
+    <!-- Listeners -->
+    <xs:complexType name="listenersEntity">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="tcp-listener">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element name="port" type="port"/>
+                            <xs:element name="bind-address" type="nonEmptyString" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Default: 0.0.0.0</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="name" type="nonEmptyString" minOccurs="0"/>
+                            <xs:element name="proxy-protocol" type="xs:boolean" minOccurs="0"/>
+                            <xs:element name="connect-overload-protection" type="connectOverloadProtectionEntity"
+                                        minOccurs="0"/>
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="tls-tcp-listener">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element name="port" type="port"/>
+                            <xs:element name="bind-address" type="nonEmptyString" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Default: 0.0.0.0</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="name" type="nonEmptyString" minOccurs="0"/>
+                            <xs:element name="proxy-protocol" type="xs:boolean" minOccurs="0"/>
+                            <xs:element name="connect-overload-protection" type="connectOverloadProtectionEntity"
+                                        minOccurs="0"/>
+                            <xs:element name="tls" type="listenerTLSEntity"/>
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="websocket-listener">
+                    <xs:complexType mixed="true">
+                        <xs:all>
+                            <xs:element name="port" type="port"/>
+                            <xs:element name="bind-address" type="nonEmptyString" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Default: 0.0.0.0</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="name" type="nonEmptyString" minOccurs="0"/>
+                            <xs:element name="proxy-protocol" type="xs:boolean" minOccurs="0"/>
+                            <xs:element name="connect-overload-protection" type="connectOverloadProtectionEntity"
+                                        minOccurs="0"/>
+                            <xs:element name="path" type="nonEmptyString" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Default: /mqtt</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="subprotocols" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="subprotocol" type="nonEmptyString" minOccurs="0"
+                                                    maxOccurs="unbounded"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="allow-extensions" type="xs:boolean" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Default: false</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="tls-websocket-listener">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element name="port" type="port"/>
+                            <xs:element name="bind-address" type="nonEmptyString" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Default: 0.0.0.0</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="name" type="nonEmptyString" minOccurs="0"/>
+                            <xs:element name="proxy-protocol" type="xs:boolean" minOccurs="0"/>
+                            <xs:element name="connect-overload-protection" type="connectOverloadProtectionEntity"
+                                        minOccurs="0"/>
+                            <xs:element name="path" type="nonEmptyString" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Default: /mqtt</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="subprotocols" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="subprotocol" type="nonEmptyString" minOccurs="0"
+                                                    maxOccurs="unbounded"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="allow-extensions" type="xs:boolean" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Default: false</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="tls" type="listenerTLSEntity"/>
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="listenerTLSEntity">
+        <xs:all>
+            <xs:element name="keystore" type="keystoreEntity"/>
+            <xs:element name="truststore" type="truststoreEntity" minOccurs="0"/>
+            <xs:element name="protocols" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="protocol" type="nonEmptyString" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="cipher-suites" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="cipher-suite" type="nonEmptyString" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="prefer-server-cipher-suites" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="handshake-timeout" type="xs:positiveInteger" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Timeout in milliseconds. Default: 10000</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="client-authentication-mode" type="clientAuthenticationMode" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: NONE</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="concurrent-handshake-limit" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Max concurrent handshakes in progress. -1 means unlimited. Default: -1
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="native-ssl" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ocsp-stapling" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: false</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="override-url" type="nonEmptyString" minOccurs="0"/>
+                        <xs:element name="cache-interval" type="xs:positiveInteger" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Interval in seconds. Default: 3600</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="session-timeout" type="xs:unsignedInt" minOccurs="0"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="connectOverloadProtectionEntity">
+        <xs:all>
+            <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="connect-rate" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Connections per second</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:double">
+                        <xs:minExclusive value="0"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="connect-burst-size" type="xs:long" minOccurs="0"/>
+        </xs:all>
+    </xs:complexType>
+
+
+    <!-- MQTT -->
+    <xs:complexType name="mqttConfigEntity">
+        <xs:all>
+            <xs:element name="queued-messages" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="max-queue-size" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: 1000</xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                                <xs:restriction base="xs:long">
+                                    <xs:minInclusive value="1"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="strategy" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: discard</xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="discard"/>
+                                    <xs:enumeration value="discard-oldest"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="retained-messages" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: true</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="wildcard-subscriptions" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: true</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="quality-of-service" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="max-qos" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: 2</xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                                <xs:restriction base="xs:int">
+                                    <xs:enumeration value="0"/>
+                                    <xs:enumeration value="1"/>
+                                    <xs:enumeration value="2"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="topic-alias" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: true</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="max-per-client" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: 5</xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                                <xs:restriction base="xs:int">
+                                    <xs:minInclusive value="1"/>
+                                    <xs:maxInclusive value="65535"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="message-expiry" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="max-interval" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Interval in seconds. Default: 4294967296</xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                                <xs:restriction base="xs:long">
+                                    <xs:minInclusive value="0"/>
+                                    <xs:maxInclusive value="4294967296"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="session-expiry" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="max-interval" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Interval in seconds. Default: 4294967296</xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                                <xs:restriction base="xs:long">
+                                    <xs:minInclusive value="0"/>
+                                    <xs:maxInclusive value="4294967295"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="subscription-identifier" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: true</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="shared-subscriptions" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: true</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="keep-alive" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="max-keep-alive" minOccurs="0">
+                            <xs:simpleType>
+                                <xs:annotation>
+                                    <xs:documentation>Keep-alive in seconds. Default: 65535</xs:documentation>
+                                </xs:annotation>
+                                <xs:restriction base="xs:int">
+                                    <xs:minInclusive value="1"/>
+                                    <xs:maxInclusive value="65535"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="allow-unlimited" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: true</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="packets" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="max-packet-size" minOccurs="0">
+                            <xs:simpleType>
+                                <xs:annotation>
+                                    <xs:documentation>Size in bytes. Default: 268435460</xs:documentation>
+                                </xs:annotation>
+                                <xs:restriction base="xs:int">
+                                    <xs:minInclusive value="15"/>
+                                    <xs:maxInclusive value="268435460"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="receive-maximum" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="server-receive-maximum" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: 10</xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                                <xs:restriction base="xs:int">
+                                    <xs:minInclusive value="1"/>
+                                    <xs:maxInclusive value="65535"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+
+    <!-- Restrictions -->
+    <xs:complexType name="restrictionsEntity">
+        <xs:all>
+            <xs:element name="max-connections" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        -1 means unlimited. License limitations still apply. Default: -1
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:long">
+                        <xs:minInclusive value="-1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="max-client-id-length" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: 65535</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minInclusive value="1"/>
+                        <xs:maxInclusive value="65535"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="max-topic-length" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: 65535</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minInclusive value="1"/>
+                        <xs:maxInclusive value="65535"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="no-connect-idle-timeout" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Timeout in milliseconds. Default: 10000</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minInclusive value="0"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="incoming-bandwidth-throttling" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Throttling in bytes per seconds. Default: 0</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:long">
+                        <xs:minInclusive value="0"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+
+    <!-- Security -->
+    <xs:complexType name="securityConfigEntity">
+        <xs:all>
+            <xs:element name="payload-format-validation" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: false</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="utf8-validation" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: true</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="allow-empty-client-id" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: true</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="allow-request-problem-information" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: true</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="control-center-audit-log" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: true</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="rest-api-audit-log" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: true</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+
+    <!-- Internal -->
+    <xs:complexType name="internalConfigEntity">
+        <xs:sequence>
+            <xs:element name="option" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="key" type="nonEmptyString"/>
+                        <xs:element name="value" type="xs:string"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <!-- Cluster -->
+    <xs:complexType name="clusterConfigEntity">
+        <xs:all>
+            <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="transport" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:choice>
+                            <xs:element name="tcp">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element name="bind-port" type="port" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 8000</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="bind-address" type="nonEmptyString" minOccurs="0"/>
+                                        <xs:element name="external-port" type="port" minOccurs="0"/>
+                                        <xs:element name="external-address" type="nonEmptyString" minOccurs="0"/>
+                                        <xs:element name="tls" type="clusterTLSEntity" minOccurs="0"/>
+                                    </xs:all>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="udp">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element name="bind-port" type="port" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 8000</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="bind-address" type="nonEmptyString" minOccurs="0"/>
+                                        <xs:element name="external-port" type="port" minOccurs="0"/>
+                                        <xs:element name="external-address" type="nonEmptyString" minOccurs="0"/>
+                                        <xs:element name="tls" type="clusterTLSEntity" minOccurs="0"/>
+                                        <xs:element name="multicast-enabled" type="xs:boolean" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: true</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="multicast-port" type="port" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 45588</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="multicast-address" type="nonEmptyString" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 228.8.8.8</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                    </xs:all>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:choice>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="discovery" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:choice minOccurs="0" maxOccurs="unbounded">
+                            <xs:element name="broadcast">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element name="port" type="port" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 8555</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="broadcast-address" type="nonEmptyString" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 255.255.255.255</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="port-range" type="xs:int" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 5</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                    </xs:all>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="multicast" type="empty-tag"/>
+                            <xs:element name="extension" type="empty-tag"/>
+                            <xs:element name="static">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:choice minOccurs="0" maxOccurs="unbounded">
+                                            <xs:element name="node">
+                                                <xs:complexType>
+                                                    <xs:all>
+                                                        <xs:element name="host" type="nonEmptyString"/>
+                                                        <xs:element name="port" type="port"/>
+                                                    </xs:all>
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:choice>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:choice>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="replication" minOccurs="0">
+                <xs:complexType>
+                    <xs:annotation>
+                        <xs:documentation>Count of replicas to keep (including original). A value of 1 means no
+                            replication
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:all>
+                        <xs:element name="replica-count" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: 2</xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                                <xs:restriction base="xs:int">
+                                    <xs:minInclusive value="1"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="failure-detection" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="tcp-health-check" minOccurs="0">
+                            <xs:complexType>
+                                <xs:all>
+                                    <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                                        <xs:annotation>
+                                            <xs:documentation>Default: true</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:element>
+                                    <xs:element name="bind-address" type="nonEmptyString" minOccurs="0"/>
+                                    <xs:element name="bind-port" type="port" minOccurs="0">
+                                        <xs:annotation>
+                                            <xs:documentation>Bind port. Default: 0 (ephemeral port)</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:element>
+                                    <xs:element name="port-range" type="xs:int" minOccurs="0">
+                                        <xs:annotation>
+                                            <xs:documentation>Default: 50</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:element>
+                                    <xs:element name="external-address" type="nonEmptyString" minOccurs="0"/>
+                                    <xs:element name="external-port" type="port" minOccurs="0"/>
+                                </xs:all>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="heartbeat" minOccurs="0">
+                            <xs:complexType>
+                                <xs:all>
+                                    <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                                        <xs:annotation>
+                                            <xs:documentation>Default: true</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:element>
+                                    <xs:element name="interval" minOccurs="0">
+                                        <xs:annotation>
+                                            <xs:documentation>Interval in milliseconds</xs:documentation>
+                                        </xs:annotation>
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:int">
+                                                <xs:minInclusive value="1"/>
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:element>
+                                    <xs:element name="timeout" minOccurs="0">
+                                        <xs:annotation>
+                                            <xs:documentation>Timeout in milliseconds</xs:documentation>
+                                        </xs:annotation>
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:int">
+                                                <xs:minInclusive value="1"/>
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:element>
+                                </xs:all>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="clusterTLSEntity">
+        <xs:all>
+            <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="server-keystore" type="keystoreEntity" minOccurs="0"/>
+            <xs:element name="client-certificate-truststore" type="truststoreEntity" minOccurs="0"/>
+            <xs:element name="client-authentication-keystore" type="keystoreEntity" minOccurs="0"/>
+            <xs:element name="server-certificate-truststore" type="truststoreEntity" minOccurs="0"/>
+            <xs:element name="client-authentication-mode" type="clientAuthenticationMode" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: NONE</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="protocols" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="protocol" type="nonEmptyString" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="cipher-suites" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="cipher-suite" type="nonEmptyString" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+
+    <!-- Control Center -->
+    <xs:complexType name="controlCenterEntity">
+        <xs:all>
+            <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="default-user-enabled" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="default-login-mechanism-enabled" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="max-session-idle-time" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Timeout in seconds. Default: 14400</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minInclusive value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="listeners" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:choice minOccurs="0" maxOccurs="unbounded">
+                            <xs:element name="http">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element name="port" type="port" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 8080</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="bind-address" type="nonEmptyString" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 127.0.0.1</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                    </xs:all>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="https">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element name="port" type="port" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 8080</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="bind-address" type="nonEmptyString" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 127.0.0.1</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="tls" type="controlCenterTLSEntity"/>
+                                    </xs:all>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:choice>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="users" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="user" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:all>
+                                    <xs:element name="name" type="nonEmptyString"/>
+                                    <xs:element name="password" type="nonEmptyString"/>
+                                </xs:all>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="jwt-signing" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="keystore" type="jwtSigningKeystoreEntity"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="controlCenterTLSEntity">
+        <xs:all>
+            <xs:element name="keystore" type="keystoreEntity"/>
+            <xs:element name="protocols" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="protocol" type="nonEmptyString" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="cipher-suites" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="cipher-suite" type="nonEmptyString" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="jwtSigningKeystoreEntity">
+        <xs:all>
+            <xs:element name="type" type="keystoreTypeEntity"/>
+            <xs:element name="path" type="nonEmptyString"/>
+            <xs:element name="password" type="xs:string"/>
+            <xs:element name="private-key-password" type="xs:string"/>
+            <xs:element name="key-alias" type="nonEmptyString"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:simpleType name="keystoreTypeEntity">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="JKS"/>
+            <xs:enumeration value="PKCS12"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Overload Protection -->
+    <xs:complexType name="overloadProtectionEntity">
+        <xs:all>
+            <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+
+    <!-- Usage Statistics -->
+    <xs:complexType name="usageStatisticsEntity">
+        <xs:all>
+            <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+
+    <!-- REST API -->
+    <xs:complexType name="restApiEntity">
+        <xs:all>
+            <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="listeners" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:choice minOccurs="0" maxOccurs="unbounded">
+                            <xs:element name="http" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element name="port" type="port" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 8888</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="bind-address" type="nonEmptyString" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 127.0.0.1</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="name" type="nonEmptyString" minOccurs="0"/>
+                                    </xs:all>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="https" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element name="port" type="port" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 8888</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="bind-address" type="nonEmptyString" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 127.0.0.1</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="name" type="nonEmptyString" minOccurs="0"/>
+                                        <xs:element name="tls" type="restApiTLSEntity"/>
+                                    </xs:all>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:choice>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="auth" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: false</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="restApiTLSEntity">
+        <xs:all>
+            <xs:element name="keystore" type="keystoreEntity"/>
+            <xs:element name="protocols" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="protocol" type="nonEmptyString" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="cipher-suites" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="cipher-suite" type="nonEmptyString" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+
+    <!-- Health API -->
+    <xs:complexType name="healthApiEntity">
+        <xs:all>
+            <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="listeners" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:choice minOccurs="0" maxOccurs="unbounded">
+                            <xs:element name="http" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element name="port" type="port" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 8889</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="bind-address" type="nonEmptyString" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Default: 127.0.0.1</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="name" type="nonEmptyString" minOccurs="0"/>
+                                    </xs:all>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:choice>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+
+    <!-- MQTT Addons -->
+    <xs:complexType name="mqttAddonsEntity">
+        <xs:all>
+            <xs:element name="expired-messages-topic" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: false</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="dropped-messages-topic" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: false</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="dead-messages-topic" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Default: false</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+
+    <!-- Client Event History -->
+    <xs:complexType name="clientEventHistoryEntity">
+        <xs:all>
+            <xs:element name="enabled" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default: false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="lifetime" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Interval in seconds. Default: 604800</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minInclusive value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+
+    <!-- DataHub-->
+    <xs:complexType name="dataHubEntity">
+        <xs:all>
+            <xs:element name="data-validation" type="dataValidationEntity" minOccurs="0"/>
+            <xs:element name="behavior-validation" type="behaviorValidationEntity" minOccurs="0"/>
+            <xs:element name="scripting" type="scriptingEntity" minOccurs="0"/>
+            <xs:element name="modules" type="modulesEntity" minOccurs="0"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="modulesEntity">
+        <xs:all>
+            <xs:element name="hivemq-registry" type="hivemqRegistryEntity" minOccurs="0"/>
+            <xs:element name="registries" type="registriesEntity" minOccurs="0"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="dataValidationEntity">
+        <xs:all>
+            <xs:element name="enabled" type="xs:boolean" minOccurs="0" default="true">
+                <xs:annotation>
+                    <xs:documentation>Default: true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="injection-points" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:any minOccurs="0" maxOccurs="1" processContents="skip"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="behaviorValidationEntity">
+        <xs:all>
+            <xs:element name="enabled" type="xs:boolean" minOccurs="0" default="true">
+                <xs:annotation>
+                    <xs:documentation>Default: true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="scriptingEntity">
+        <xs:all>
+            <xs:element name="enabled" type="xs:boolean" minOccurs="0" default="true">
+                <xs:annotation>
+                    <xs:documentation>Default: true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="hivemqRegistryEntity">
+        <xs:all>
+            <xs:element name="enabled" type="xs:boolean" minOccurs="0" default="true">
+                <xs:annotation>
+                    <xs:documentation>Default: true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="registriesEntity">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="remote">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element name="enabled" type="xs:boolean" minOccurs="0" default="true">
+                                <xs:annotation>
+                                    <xs:documentation>Default: true</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="id" type="nonEmptyString"/>
+                            <xs:element name="name" type="nonEmptyString"/>
+                            <xs:element name="url" type="nonEmptyString"/>
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- ControlPlane-->
+    <xs:complexType name="controlPlaneEntity">
+        <xs:all>
+            <xs:element name="provisioning-key" type="nonEmptyString" minOccurs="0"/>
+            <xs:element name="labels" type="labelsEntity" minOccurs="0"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="labelsEntity">
+        <xs:sequence>
+            <xs:element name="label" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="name" type="nonEmptyString"/>
+                        <xs:element name="value" type="nonEmptyString"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Common types -->
+
+    <xs:complexType name="keystoreEntity">
+        <xs:all>
+            <xs:element name="path" type="nonEmptyString"/>
+            <xs:element name="password" type="xs:string"/>
+            <xs:element name="private-key-password" type="xs:string"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="truststoreEntity">
+        <xs:all>
+            <xs:element name="path" type="nonEmptyString"/>
+            <xs:element name="password" type="xs:string"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:simpleType name="clientAuthenticationMode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="OPTIONAL"/>
+            <xs:enumeration value="REQUIRED"/>
+            <xs:enumeration value="NONE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="port">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="65535"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="empty-tag">
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="collapse"/>
+            <xs:length value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="nonEmptyString">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:whiteSpace value="collapse"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

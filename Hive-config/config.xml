@@ -1,21 +1,52 @@
 <?xml version="1.0"?>
-<hivemq>
+<hivemq xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <cluster>
+        <enabled>false</enabled>
+    </cluster>
 
     <listeners>
         <tcp-listener>
             <port>1883</port>
             <bind-address>0.0.0.0</bind-address>
+            <name>open-world-listener</name>
+        </tcp-listener>
+   
+        <tcp-listener>
+            <port>1884</port>
+            <bind-address>0.0.0.0</bind-address>
+            <name>dbsecure-listener</name>
+        </tcp-listener>
+
+        <tcp-listener>
+            <port>1885</port>
+            <bind-address>127.0.0.1</bind-address>
+            <name>same-machine-listener</name>
         </tcp-listener>
     </listeners>
+
+   <control-center>
+        <enabled>true</enabled>
+        <listeners>
+            <http>
+                <port>8080</port>
+                <bind-address>0.0.0.0</bind-address>
+            </http>
+        </listeners>
+    </control-center>
 
     <rest-api>
         <enabled>true</enabled>
         <listeners>
             <http>
                 <port>8888</port>
-                <bind-address>127.0.0.1</bind-address>
+                <bind-address>0.0.0.0</bind-address>
             </http>
         </listeners>
     </rest-api>
+
+    <anonymous-usage-statistics>
+        <enabled>false</enabled>
+    </anonymous-usage-statistics>
 
 </hivemq>

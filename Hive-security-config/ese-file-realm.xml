@@ -5,8 +5,8 @@
         <!-- users are fetched via AUTHENTICATION_KEY-->
         <users>
             <user>
-                <name>mqtt-user-1</name>
-                <password>mqtt-password-1</password>
+                <name>superuser</name>
+                <password>admin</password>
                 <permissions>
                     <permission>
                         <topic>#</topic>
@@ -77,13 +77,15 @@
         </roles>
     </mqtt>
 
+
+
     <control-center>
         <!-- list of available permissions:
                https://www.hivemq.com/docs/ese/latest/enterprise-security-extension/ese.html#control-center-access-control-permissions -->
         <users>
             <user>
-                <name>cc-user-1</name>
-                <password>cc-password-1</password>
+                <name>cc-admin</name>
+                <password>cc-password</password>
                 <permissions>
                     <permission>HIVEMQ_SUPER_ADMIN</permission>
                 </permissions>

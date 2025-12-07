@@ -27,7 +27,9 @@ services:
     command: >
       sh -c "
         until pg_isready -h db -p 5432 -U myuser; do sleep 1; done;
-        psql -h db -U myuser -d mydb -f /sql/create_tables.sql
+        psql -h db -U myuser -d mydb -f /sql/create_tables.sql;
+        psql -h db -U myuser -d mydb -f /sql/Security-tables.sql;
+        psql -h db -U myuser -d mydb -f /sql/addusers.sql
       "
 
   hivemq:
@@ -35,8 +37,10 @@ services:
     container_name: hivemq
     ports:
       - "1883:1883"    # MQTT
+      - "1884:1884"    # MQTT with DB security 
       - "8080:8080"    # HiveMQ Control Center
       - "9399:9399"    # Prometheus metrics (extension)
+      - "8888:8888"    # HiveMQ API
     volumes:
       - ./hivemq-data:/opt/hivemq/data
       - ./Hive-config:/opt/hivemq/conf
@@ -62,7 +66,7 @@ services:
     image: prom/prometheus:latest
     container_name: prometheus
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./Prometius-config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     ports:
       - "9090:9090"
     restart: unless-stopped
