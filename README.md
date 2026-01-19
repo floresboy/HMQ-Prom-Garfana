@@ -19,9 +19,19 @@ https://www.hivemq.com/blog/visualizing-hivemq-cluster-and-node-metrics-grafana/
 https://github.com/hivemq/hivemq-grafana-dashboards
 https://docs.hivemq.com/hivemq-enterprise-security-extension/latest/getting-started.html#getting-started-with-sql-databases
 
-`mqtt sub -t "#" {"temperature": 25.74, "timestamp": "2025-12-06T14:27:57.316401Z"} {"temperature": 23.36, "timestamp": "2025-12-06T14:28:02.318782Z"}`
+### Check MQTT on CLI
 
-Grafana query used by sensor graph:
+mqtt sub -t "#"
+
+### example JSON value as published by simulator
+
+`{"temperature": 3.97, "isotime": "2026-01-19T11:49:39.172Z", "SensorID": "TempSimulator", "unixtime": 1768823379172}`
+
+#### test:
+
+mqtt sub -t "#" -u superuser -pw admin -p 1883 -J | jq
+
+### Grafana query used by sensor graph:
 
 SELECT
 isotime AS "time",      -- Time column for X-axis
@@ -31,9 +41,7 @@ tempdata
 ORDER BY
 isotime ASC;
 
-mqtt sub -t "#" -u superuser -pw admin -p 1883 -J | jq
-
-pip install paho-mqtt  --root-user-action=ignore
+#### Secure testing:
 
 mqtt test -u superuser -pw admin -p 1883                    # file realm superuser / admin
 mqtt test -u "superuser" -pw supersecurepassword -p 1884    # DB realm /   superuser / supersecurepassword
