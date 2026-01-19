@@ -6,24 +6,20 @@ Make sure the promethius extention JARfile (https://github.com/hivemq/hivemq-pro
 
 ### How to run:
 
-```docker compose up -d
+```docker compose up -d```
 
-```
+### Access:
 
-### access:
-
-2. HiveMQ Control Center: http://localhost:8080 (cc-admin / cc-password)
-3. MQTT broker: tcp://localhost:1883 (full control: superuser / admin)
-4. Prometheus: http://localhost:9090
-5. Grafana: http://localhost:3000 (admin/admin)
+2. HiveMQ Control Center: `http://localhost:8080` (cc-admin / cc-password)
+3. MQTT broker: `tcp://localhost:1883` (full control: superuser / admin)
+4. Prometheus: `http://localhost:9090`
+5. Grafana: `http://localhost:3000` (admin/admin)
 
 https://www.hivemq.com/blog/visualizing-hivemq-cluster-and-node-metrics-grafana/
 https://github.com/hivemq/hivemq-grafana-dashboards
 https://docs.hivemq.com/hivemq-enterprise-security-extension/latest/getting-started.html#getting-started-with-sql-databases
 
-mqtt sub -t "#"
-{"temperature": 25.74, "timestamp": "2025-12-06T14:27:57.316401Z"}
-{"temperature": 23.36, "timestamp": "2025-12-06T14:28:02.318782Z"}
+`mqtt sub -t "#" {"temperature": 25.74, "timestamp": "2025-12-06T14:27:57.316401Z"} {"temperature": 23.36, "timestamp": "2025-12-06T14:28:02.318782Z"}`
 
 Grafana query used by sensor graph:
 
