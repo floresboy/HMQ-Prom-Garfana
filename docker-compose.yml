@@ -106,8 +106,9 @@ services:
       MQTT_PORT: 1883
       MQTT_TOPIC: sensors/temperature
       INTERVAL: 5
+      PYTHONUNBUFFERED: 1
     command: >
-      sh -c "pip install paho-mqtt  --root-user-action=ignore &&
+      sh -c "pip install --upgrade pip &&pip install paho-mqtt  --root-user-action=ignore &&
              python3 /app/publisher.py"
     volumes:
       - ./temp-simulator:/app
