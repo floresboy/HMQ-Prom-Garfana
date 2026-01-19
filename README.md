@@ -2,7 +2,7 @@ HiveMQ + Prometheus + Grafana stack
 
 Notice:
 
-place the promethius extention JARfile (https://github.com/hivemq/hivemq-prometheus-extension/releases/download/4.0.15/hivemq-prometheus-extension-4.0.15.zip) in the Promethius extention directory
+Make sure the promethius extention JARfile (https://github.com/hivemq/hivemq-prometheus-extension/releases/download/4.0.15/hivemq-prometheus-extension-4.0.15.zip) is in the Promethius extention directory.
 
 How to run:
 
