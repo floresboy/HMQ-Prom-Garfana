@@ -31,29 +31,15 @@ mqtt sub -t "#"
 
 ##### Non TLS:
 
-mqtt sub -t "#" -u superuser -pw admin -p 1883 -J | jq                  # file based auth
-mqtt sub -t "#" -u superuser -pw supersecurepassword -p 1884 -J | jq    # DB based auth
+`mqtt sub -t "#" -u superuser -pw admin -p 1883 -J | jq                  # file based auth`
+
+`mqtt sub -t "#" -u superuser -pw supersecurepassword -p 1884 -J | jq    # DB based auth`
 
 ##### TLS test
 
-mqtt test \
--h localhost \
--p 8883 \
---secure \
---cafile hivemq.crt \
--u superuser -pw admin                                                  # file based auth
-
-
+`mqtt test  -h localhost  -p 8883  --secure  --cafile hivemq.crt  -u superuser -pw admin                                                  # file based auth`
 
 ### Grafana query used by sensor graph:
 
-SELECT
-isotime AS "time",      -- Time column for X-axis
-temperature AS "value"  -- Value column for Y-axis
-FROM
-tempdata
-ORDER BY
-isotime ASC;
-
-
+`SELECT isotime AS "time",      -- Time column for X-axis temperature AS "value"  -- Value column for Y-axis FROM tempdata ORDER BY isotime ASC;`
 
