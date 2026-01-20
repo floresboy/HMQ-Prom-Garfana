@@ -27,9 +27,23 @@ mqtt sub -t "#"
 
 `{"temperature": 3.97, "isotime": "2026-01-19T11:49:39.172Z", "SensorID": "TempSimulator", "unixtime": 1768823379172}`
 
-#### test:
+#### Security test:
 
-mqtt sub -t "#" -u superuser -pw admin -p 1883 -J | jq
+##### Non TLS:
+
+mqtt sub -t "#" -u superuser -pw admin -p 1883 -J | jq                  # file based auth
+mqtt sub -t "#" -u superuser -pw supersecurepassword -p 1884 -J | jq    # DB based auth
+
+##### TLS test
+
+mqtt test \
+-h localhost \
+-p 8883 \
+--secure \
+--cafile hivemq.crt \
+-u superuser -pw admin                                                  # file based auth
+
+
 
 ### Grafana query used by sensor graph:
 
@@ -41,22 +55,5 @@ tempdata
 ORDER BY
 isotime ASC;
 
-#### Secure testing:
 
-mqtt test -u superuser -pw admin -p 1883                    # file realm superuser / admin
-mqtt test -u "superuser" -pw supersecurepassword -p 1884    # DB realm /   superuser / supersecurepassword
-mqtt pub -u sensor -pw password -t sensors/testsensor -m 123
-
-# TLS test
-
-mqtt test 
--u superuser -pw admin 
--h localhost 
--p 8883 
---secure 
---cafile hivemq.crt
-
-openssl x509 -in hivemq.crt -text -noout
-
-zip -r ../AddContextToSensors-1.0.0.module .
 

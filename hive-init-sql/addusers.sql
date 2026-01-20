@@ -1,3 +1,7 @@
+
+
+-- username = superuser and password = supersecurepassword.
+
 insert into public.users
   (username, password, password_iterations, password_salt, algorithm)
   values
