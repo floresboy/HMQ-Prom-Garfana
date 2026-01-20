@@ -1,4 +1,4 @@
-HiveMQ + Prometheus + Grafana stack
+# HiveMQ + Prometheus + Grafana stack
 
 ### Notice:
 
@@ -35,9 +35,9 @@ mqtt sub -t "#"
 
 `mqtt sub -t "#" -u superuser -pw supersecurepassword -p 1884 -J | jq    # DB based auth`
 
-##### TLS test
+##### TLS test (file based auth)
 
-`mqtt test  -h localhost  -p 8883  --secure  --cafile hivemq.crt  -u superuser -pw admin                                                  # file based auth`
+`mqtt test  -h localhost  -p 8883  --secure  --cafile hivemq.crt  -u superuser -pw admin                                                 `
 
 ### Grafana query used by sensor graph:
 
