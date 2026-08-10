@@ -16,6 +16,15 @@
                         <shared-subscription>ALL</shared-subscription>
                         <shared-group>group-1</shared-group>
                     </permission>
+                    <!-- MQTT forbids a wildcard filter from matching a $-topic, so the '#'
+                         permission above does NOT cover the Sparkplug Aware system topics.
+                         Needs its own explicit entry, or SUBSCRIBE is denied with 0x80. -->
+                    <permission>
+                        <topic>$sparkplug/certificates/#</topic>
+                        <qos>ALL</qos>
+                        <activity>ALL</activity>
+                        <retain>ALL</retain>
+                    </permission>
                 </permissions>
             </user>
 

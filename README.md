@@ -6,6 +6,8 @@
 
 Make sure the promethius extention JARfile (https://github.com/hivemq/hivemq-prometheus-extension/releases/download/4.0.15/hivemq-prometheus-extension-4.0.15.zip) is in the Promethius extention directory.
 
+The Sparkplug Aware extension (https://github.com/hivemq/hivemq-sparkplug-aware-extension/releases/download/4.33.9/hivemq-sparkplug-aware-extension-4.33.9.zip) is checked in unzipped under `hivemq-sparkplug-aware-extension/` and bind mounted the same way. It ships without a `DISABLED` flagfile, so it starts on its own -- no change needed in `hivemq-entrypoint.sh`.
+
 ### How to run:
 
 ```docker compose up -d```
@@ -130,6 +132,30 @@ curl -X POST "http://127.0.0.1:8888/api/v1/data-hub/modules/instances" \
 
 raw ingestion topic   : ```spBv1.0/factory1/NDATA/edge01```
 after DH decoding     : ```spB-factory/spB-edge01/undefined```
+
+#### Sparkplug Aware broker
+
+The Sparkplug Aware extension copies every NBIRTH and DBIRTH to a system topic, retained, so a
+newly connecting host application can fetch the birth certificates without waiting for a rebirth:
+
+```
+$sparkplug/certificates/spBv1.0/<group_id>/NBIRTH/<edge_node_id>
+$sparkplug/certificates/spBv1.0/<group_id>/DBIRTH/<edge_node_id>/<device_id>
+```
+
+It also rewrites the NDEATH timestamp to the time the broker actually delivers it, instead of the
+time the LWT was registered.
+
+Note: per the MQTT spec a wildcard filter never matches a topic starting with `$`, so `mqtt sub -t "#"`
+will **not** show these. Subscribe explicitly:
+
+```
+mqtt sub -t '$sparkplug/certificates/#' -u superuser -pw admin -p 1883
+```
+
+Config lives in `hivemq-sparkplug-aware-extension/conf/config.properties` (stock HiveMQ defaults).
+Set `sparkplug.json.log=true` there to get the decoded payloads dumped as JSON in the HiveMQ log --
+handy when debugging the simulator, noisy otherwise.
 
 
 ## ===== scratch zone =====
